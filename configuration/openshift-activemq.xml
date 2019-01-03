@@ -26,7 +26,7 @@
         <destinationPolicy>
             <policyMap>
                 <policyEntries>
-                    <policyEntry queue=">" consumersBeforeDispatchStarts="3" maxBrowsePageSize="700">
+                    <policyEntry queue=">" maxBrowsePageSize="700">
                         <networkBridgeFilterFactory>
                             <conditionalNetworkBridgeFilterFactory replayWhenNoConsumers="true" replayDelay="500" />
                         </networkBridgeFilterFactory>
