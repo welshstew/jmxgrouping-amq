@@ -21,7 +21,7 @@
     -->
     <broker xmlns="http://activemq.apache.org/schema/core" brokerName="${HOSTNAME}" dataDirectory="${activemq.data}">
 
-        <!-- ##### DESTINATIONS ##### -->
+        <!-- ##### DESTINATIONS ##### -->               
 
         <destinationPolicy>
             <policyMap>
@@ -32,30 +32,6 @@
                         </networkBridgeFilterFactory>
                     </policyEntry>
                     
-                    <policyEntry queue=">" producerFlowControl="true" memoryLimit="1mb" maxBrowsePageSize="700">
-                        <!--
-                            Allow messages to be replayed back to original broker if there is demand.
-                            (replayWhenNoConsumers="true").
-                            Due to ENTMQ-444 you also want to configure a replayDelay that is high enough so that
-                            any outstanding message acks are passed along the network bridge *before* we start
-                            to replay messages (replayDelay="500"). The value of replayDelay is a bit of a guess but
-                            on a decently fast network 500 msecs should be enough to pass on and process all message acks.
-              
-                            Note: JMS clients that use the failover transport to connect to a broker in the mesh
-                            arbitrarily should consider using an initialReconnectDelay on the failover url that is
-                            higher than replayDelay configured in the broker. E.g.
-                            "failover:(tcp://brokerA:61616,tcp://brokerB:61616)?randomize=true&initialReconnectDelay=700"
-                            This ensures that the demand subscription for this reconnecting consumer is only created
-                            after replayDelay has elapsed.
-                            If its created before, it may lead to the remote broker skipping message dispatch
-                            to the remote broker and those message would seem to be stuck on the broker despite a consumer
-                            being connected via a networked broker.
-                            See ENTMQ-538 for more details.
-                        -->
-                        <networkBridgeFilterFactory>
-                            <conditionalNetworkBridgeFilterFactory replayWhenNoConsumers="true" replayDelay="500" />
-                        </networkBridgeFilterFactory>
-                    </policyEntry>
                     <policyEntry topic=">" producerFlowControl="true">
                         <!--
                             The constantPendingMessageLimitStrategy is used to prevent
